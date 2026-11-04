@@ -7,6 +7,8 @@ def calculate_average(marks):
 #print(calculate_average([])
 
 def get_grade(avg):
+    if avg < 0 or avg > 100:
+        raise ValueError("Average must be between 0 and 100")
     if avg >= 90:
         return "A+"
     elif avg >= 75:
@@ -20,20 +22,25 @@ def get_grade(avg):
     else:
         return "F"
 
+def read_marks(prompt):
+     while True:
+        try:
+            value = float(input(prompt))
+            if value < 0 or value > 100:
+                print("Marks must be between 0 and 100")
+                continue
+            return value
+        except ValueError:
+            print("Please enter a number")
 
-students = {
-    "Aman": [80, 65, 90],
-    "Riya": [70, 88, 75],
-}
 
-for name, marks in students.items():
-    avg = calculate_average(marks)
-    grade = get_grade(avg)
-    print(f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})")
+name = input("Student name: ")
 
-averages = {}
+marks = []
+for i in range(5):
+    m = read_marks(f"Marks for subject {i + 1}: ")
+    marks.append(m)
 
-for name, marks in students.items():
-    averages[name] = round(calculate_average(marks), 2)
-
-print(averages)
+avg = calculate_average(marks)
+grade = get_grade(avg)
+print(f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})")
