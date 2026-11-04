@@ -43,12 +43,21 @@ def read_all_marks(subject_count):
 students = {}
 
 while True:
-    name = input("Student name (or type done): ")
-    if name == "done":
+    name = input("Student name (or type done): ").strip()
+    if name.lower() == "done":
         break
+    if name == "":
+        print("Name cannot be empty")
+        continue
+    if name in students:
+        print(f"{name} already exists. Use a different name.")
+        continue
     students[name] = read_all_marks(5)
 
-for name, marks in students.items():
-    avg = calculate_average(marks)
-    grade = get_grade(avg)
-    print(f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})")
+if not students:
+    print("No students entered")
+else:
+    for name, marks in students.items():
+        avg = calculate_average(marks)
+        grade = get_grade(avg)
+        print(f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})")
