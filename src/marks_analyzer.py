@@ -33,13 +33,16 @@ def read_marks(prompt):
         except ValueError:
             print("Please enter a number")
 
+def read_all_marks(subject_count):
+    marks = []
+    for i in range(subject_count):
+        m = read_marks(f"Marks for subject {i + 1}: ")
+        marks.append(m)
+    return marks
 
 name = input("Student name: ")
 
-marks = []
-for i in range(5):
-    m = read_marks(f"Marks for subject {i + 1}: ")
-    marks.append(m)
+marks = read_all_marks(5)
 
 avg = calculate_average(marks)
 grade = get_grade(avg)
