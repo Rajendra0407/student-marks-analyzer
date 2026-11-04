@@ -40,10 +40,15 @@ def read_all_marks(subject_count):
         marks.append(m)
     return marks
 
-name = input("Student name: ")
+students = {}
 
-marks = read_all_marks(5)
+while True:
+    name = input("Student name (or type done): ")
+    if name == "done":
+        break
+    students[name] = read_all_marks(5)
 
-avg = calculate_average(marks)
-grade = get_grade(avg)
-print(f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})")
+for name, marks in students.items():
+    avg = calculate_average(marks)
+    grade = get_grade(avg)
+    print(f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})")
