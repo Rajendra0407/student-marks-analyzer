@@ -57,23 +57,35 @@ while True:
 if not students:
     print("No students entered")
 
-
 else:
     topper_name = ""
     topper_avg = -1
-    total = 0                          # naya: shuru mein total 0 hai
+    total = 0
 
-    for name, marks in students.items():
-        avg = calculate_average(marks)
-        grade = get_grade(avg)
-        print(f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})")
+    with open("report.txt", "w") as f:
+        for name, marks in students.items():
+            avg = calculate_average(marks)
+            grade = get_grade(avg)
+            line = f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})"
+            print(line)
+            f.write(line + "\n")
 
-        total += avg                   # naya: har student ka average jodo
+            total += avg
 
-        if avg > topper_avg:
-            topper_avg = avg
-            topper_name = name
+            if avg > topper_avg:
+                topper_avg = avg
+                topper_name = name
 
-    class_avg = total / len(students) if students else 0  # naya: total ko students ki ginti se baanto
-    print(f"Topper: {topper_name} with {round(topper_avg, 2)}")
-    print(f"Class average: {round(class_avg, 2)}")
+        class_avg = total / len(students)
+
+        topper_line = f"Topper: {topper_name} with {round(topper_avg, 2)}"
+        class_line = f"Class average: {round(class_avg, 2)}"
+
+        print(topper_line)
+        print(class_line)
+        f.write(topper_line + "\n")
+        f.write(class_line + "\n")
+
+    print("Report saved to report.txt")
+
+
