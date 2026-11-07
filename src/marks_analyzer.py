@@ -1,10 +1,12 @@
-def calculate_average(marks):
-    if not marks:              # Check if list is empty
-        return 0
-    return sum(marks) / len(marks)  # Total / Count
+SUBJECT_COUNT = 5
+REPORT_FILE = "report.txt"
 
-#print(calculate_average([80, 65, 90]))
-#print(calculate_average([])
+
+def calculate_average(marks):
+    if not marks:
+        return 0
+    return sum(marks) / len(marks)
+
 
 def get_grade(avg):
     if avg < 0 or avg > 100:
@@ -22,8 +24,9 @@ def get_grade(avg):
     else:
         return "F"
 
+
 def read_marks(prompt):
-     while True:
+    while True:
         try:
             value = float(input(prompt))
             if value < 0 or value > 100:
@@ -33,6 +36,7 @@ def read_marks(prompt):
         except ValueError:
             print("Please enter a number")
 
+
 def read_all_marks(subject_count):
     marks = []
     for i in range(subject_count):
@@ -40,52 +44,59 @@ def read_all_marks(subject_count):
         marks.append(m)
     return marks
 
-students = {}
 
-while True:
-    name = input("Student name (or type done): ").strip()
-    if name.lower() == "done":
-        break
-    if name == "":
-        print("Name cannot be empty")
-        continue
-    if name in students:
-        print(f"{name} already exists. Use a different name.")
-        continue
-    students[name] = read_all_marks(5)
+def read_students():
+    students = {}
+    while True:
+        name = input("Student name (or type done): ").strip()
+        if name.lower() == "done":
+            break
+        if name == "":
+            print("Name cannot be empty")
+            continue
+        if name in students:
+            print(f"{name} already exists. Use a different name.")
+            continue
+        students[name] = read_all_marks(SUBJECT_COUNT)
+    return students
 
-if not students:
-    print("No students entered")
 
-else:
+def build_report(students):
+    lines = []
+    total = 0
     topper_name = ""
     topper_avg = -1
-    total = 0
 
-    with open("report.txt", "w") as f:
-        for name, marks in students.items():
-            avg = calculate_average(marks)
-            grade = get_grade(avg)
-            line = f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})"
-            print(line)
+    for name, marks in students.items():
+        avg = calculate_average(marks)
+        grade = get_grade(avg)
+        lines.append(f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})")
+        total += avg
+        if avg > topper_avg:
+            topper_avg = avg
+            topper_name = name
+
+    class_avg = total / len(students)
+    lines.append(f"Topper: {topper_name} with {round(topper_avg, 2)}")
+    lines.append(f"Class average: {round(class_avg, 2)}")
+    return lines
+
+
+def main():
+    students = read_students()
+    if not students:
+        print("No students entered")
+        return
+
+    lines = build_report(students)
+    for line in lines:
+        print(line)
+
+    with open(REPORT_FILE, "w") as f:
+        for line in lines:
             f.write(line + "\n")
-
-            total += avg
-
-            if avg > topper_avg:
-                topper_avg = avg
-                topper_name = name
-
-        class_avg = total / len(students)
-
-        topper_line = f"Topper: {topper_name} with {round(topper_avg, 2)}"
-        class_line = f"Class average: {round(class_avg, 2)}"
-
-        print(topper_line)
-        print(class_line)
-        f.write(topper_line + "\n")
-        f.write(class_line + "\n")
-
-    print("Report saved to report.txt")
+    print(f"Report saved to {REPORT_FILE}")
 
 
+if __name__ == "__main__":
+    main()
