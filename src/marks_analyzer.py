@@ -56,8 +56,18 @@ while True:
 
 if not students:
     print("No students entered")
+
 else:
+    topper_name = ""
+    topper_avg = -1
+
     for name, marks in students.items():
         avg = calculate_average(marks)
         grade = get_grade(avg)
         print(f"{name}: Percentage: {round(avg, 2)} Grade: ({grade})")
+
+        if avg > topper_avg:                    # kya avg ab tak ke sabse bade se bada hai?
+            topper_avg = avg
+            topper_name = name
+
+    print(f"Topper: {topper_name} with {round(topper_avg, 2)}")
